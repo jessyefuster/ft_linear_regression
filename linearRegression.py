@@ -56,8 +56,10 @@ def trainingAlgorithm(dataset, theta0, theta1):
 	according to the dataset
 	The training algorithm is a Gradient Descent
 	"""
-	learningRate0, learningRate1 = 0.00001, 0.00001
+	learningRate0, learningRate1 = 10., 10.
 	dataLen = float(len(dataset))
+
+	i = 0
 
 	while True:
 		sumFunction0 = ( sumCosts0(dataset, theta0, theta1) / dataLen )
@@ -65,21 +67,44 @@ def trainingAlgorithm(dataset, theta0, theta1):
 		gradient0 = learningRate0 * sumFunction0
 		gradient1 = learningRate1 * sumFunction1
 
+		if i:
+			print(lastStep0, gradient0)
+			print(lastStep1, gradient1)
+
+			if abs(gradient0) > lastStep0:
+				while abs(gradient0) > lastStep0:
+					print(lastStep0, gradient0)
+					learningRate0 *= 0.8
+					gradient0 = learningRate0 * sumFunction0
+			else:
+				pass 
+
+			if abs(gradient1) > lastStep1:
+				while abs(gradient1) > lastStep1:
+					learningRate1 *= 0.8
+					gradient1 = learningRate1 * sumFunction1
+			else:
+				pass
+
+		lastStep0, lastStep1 = abs(gradient0), abs(gradient1)
+
 		theta0 -= gradient0
 		theta1 -= gradient1
 
 		if not math.isnan(theta0) and not math.isnan(theta1):
 			print(theta0, theta1)
 
-		if abs(gradient0) < 0.00001 and abs(gradient1) < 0.00001:
+		if abs(gradient0) < 0.000001 and abs(gradient1) < 0.000001:
 			return (theta0, theta1)
+		
+		i = 1
 
 
 if __name__ == '__main__':
 
 	dataset = {
-		'km':		[100., 200., 300., 400.],
-		'price':	[300., 200., 300., 400.],
+		'km':		[0., 2., 4., 6.],
+		'price':	[0., 1., 2., 3.],
 		'len':		4
 	}
 
@@ -102,7 +127,7 @@ if __name__ == '__main__':
 	theta0, theta1 = trainingAlgorithm(dataset, 0., 0.)
 
 	print("Theta0 : {}\nTheta1 : {}".format(theta0, theta1))
-	print("output for 250:")
-	print(hypothesis(250., theta0, theta1))
+	print("output for 2:")
+	print(hypothesis(2., theta0, theta1))
 
 	# print("The output value is {}".format(outputValue))
