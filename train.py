@@ -78,7 +78,6 @@ def trainingAlgorithm(dataset, theta0, theta1, graph = False):
 				showGraph(theta0 * 1000, theta1, True)
 			else:
 				i += 1
-	return(0., 0.)
 
 
 
